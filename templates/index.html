@@ -337,8 +337,14 @@
                         <h4 class="mb-0"><i class="fas fa-comments me-2"></i>Interview Session</h4>
                     </div>
                     <div class="card-body">
-                        <div class="chat-container" id="chatContainer">
+                        <div class="chat-container" id="chat-container">
                             <!-- Messages will be added here -->
+                        </div>
+                        <!-- Review Button -->
+                        <div class="d-flex justify-content-center mt-3">
+                            <button class="btn btn-primary" id="review-button" style="width: 200px;">
+                                <i class="fas fa-eye me-2"></i>Review Conversation
+                            </button>
                         </div>
 
                         <!-- Input Area -->
@@ -604,6 +610,49 @@
             }
             addMessage("Thank you for completing the interview! You can start a new interview whenever you're ready.", 'ai');
         });
+        // Add review button functionality
+        document.getElementById('review-button').addEventListener('click', function() {
+            // Get all messages from the chat container
+            const messages = document.querySelectorAll('.message-content');
+            let conversation = '';
+            
+            // Format the conversation for review
+            messages.forEach(msg => {
+                const text = msg.textContent.trim();
+                if (text) {
+                    conversation += text + '\n';
+                }
+            });
+
+            // Create a new modal for review
+            const modal = document.createElement('div');
+            modal.className = 'modal fade';
+            modal.id = 'reviewModal';
+            modal.innerHTML = `
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Interview Conversation Review</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <pre class="bg-light p-3 rounded">${conversation}</pre>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Add modal to body
+            document.body.appendChild(modal);
+
+            // Show modal
+            const modalInstance = new bootstrap.Modal(modal);
+            modalInstance.show();
+        });
+
     </script>
 </body>
 </html>
